@@ -1,0 +1,90 @@
+/****** NAV ******/
+nav {
+  margin-bottom : 20px;
+}
+
+#logo {
+  height : 64px;
+}
+
+#login-modal-btn {
+  display    : inline;
+  float      : right;
+  margin-top : 14px;
+}
+
+/****** NAV ******/
+
+/****** PANEL ******/
+#panel {
+  padding : 20px 0 128px 0;
+}
+
+#panel-btn {
+  margin : 0 10px;
+}
+
+.add-btn {
+  margin-top : 15px;
+}
+
+.remove-btn {
+  margin-top : 15px;
+}
+
+/****** PANEL ******/
+
+/****** GLOBAL ******/
+a {
+  color : #4CAF50; /*green*/
+}
+
+/*Label color*/
+.input-field label {
+  color : #000000;
+}
+
+/*Label focus color*/
+.input-field input[type=text]:focus + label {
+  color : #4CAF50;
+}
+
+.input-field input[type=password]:focus + label {
+  color : #4CAF50;
+}
+
+/*Label underline focus color*/
+.input-field input[type=text]:focus {
+  border-bottom : 1px solid #4CAF50;
+  box-shadow    : 0 1px 0 0 #4CAF50;
+}
+
+.input-field input[type=password]:focus {
+  border-bottom : 1px solid #4CAF50;
+  box-shadow    : 0 1px 0 0 #4CAF50;
+}
+
+/*Dropdown*/
+.dropdown-content li span {
+  color : #4CAF50; /*green*/
+}
+
+/*Modal*/
+.modal form.col.s12 {
+  padding : 0;
+}
+
+/****** GLOBAL ******/
+
+/****** SMALL GRID ******/
+@media only screen and (min-width : 0px) and (max-width : 600px) {
+  #login-btn {
+    margin-top : 10px;
+  }
+
+  #logo {
+    height : 56px;
+  }
+}
+
+/****** SMALL GRID ******/
