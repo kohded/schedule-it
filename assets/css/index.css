@@ -34,6 +34,11 @@ nav {
 
 /****** PANEL ******/
 
+/****** CALENDAR ******/
+#calendar {
+  margin-top : 30px;
+}
+
 /****** GLOBAL ******/
 a {
   color : #4CAF50; /*green*/
