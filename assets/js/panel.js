@@ -11,12 +11,6 @@ $(document).ready(function() {
   $('#remove-room-modal-btn').leanModal();
   $('.remove-room-modal-confirm-btn').leanModal();
 
-  //Date Picker
-  $('.datepicker').pickadate({
-    selectMonths: true, // Months dropdown
-    selectYears : 5 // Number of years in dropdown
-  });
-
   //Instructor Modal Form Additional Input
   $('.additional-instructor').click(function(e) {
     e.preventDefault();
@@ -88,7 +82,7 @@ $(document).ready(function() {
     $('#days').append(
       '<div class="day">' +
       '<div class="row">' +
-      '<div class="input-field col s12">' +
+      '<div class="input-field col s4">' +
       '<select multiple>' +
       '<option value="1">Monday</option>' +
       '<option value="2">Tuesday</option>' +
@@ -98,9 +92,7 @@ $(document).ready(function() {
       '</select>' +
       '<label>Day(s)</label>' +
       '</div>' +
-      '</div>' +
-      '<div class="row">' +
-      '<div class="input-field col s6">' +
+      '<div class="input-field col s2">' +
       '<select>' +
       '<option value="" disabled selected>Select</option>' +
       '<option value="8">8 AM</option>' +
@@ -120,7 +112,7 @@ $(document).ready(function() {
       '</select>' +
       '<label>Start Time (Hour)</label>' +
       '</div>' +
-      '<div class="input-field col s6">' +
+      '<div class="input-field col s2">' +
       '<select>' +
       '<option value="" disabled selected>Select</option>' +
       '<option value="10">00</option>' +
@@ -132,9 +124,7 @@ $(document).ready(function() {
       '</select>' +
       '<label>Start Time (Minute)</label>' +
       '</div>' +
-      '</div>' +
-      '<div class="row">' +
-      '<div class="input-field col s6">' +
+      '<div class="input-field col s2">' +
       '<select>' +
       '<option value="" disabled selected>Select</option>' +
       '<option value="8">8 AM</option>' +
@@ -154,7 +144,7 @@ $(document).ready(function() {
       '</select>' +
       '<label>End Time (Hour)</label>' +
       '</div>' +
-      '<div class="input-field col s6">' +
+      '<div class="input-field col s2">' +
       '<select>' +
       '<option value="" disabled selected>Select</option>' +
       '<option value="10">00</option>' +

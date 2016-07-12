@@ -8,11 +8,8 @@ $(document).ready(function() {
   //Modals
   $('#login-modal-btn').leanModal();
 
-  //Side Nav
-  $("#panel-btn").sideNav({
-    closeOnClick: true,
-    dismissible : false,
-    edge        : 'right',
-    menuWidth   : 400
+  //Admin Panel
+  $("#panel-btn").click(function() {
+    $("#panel").slideToggle("fast");
   });
 });

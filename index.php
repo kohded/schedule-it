@@ -11,13 +11,67 @@
   <link rel="stylesheet" href="assets/lib/fullcalendar/fullcalendar.min.css">
   <link rel="stylesheet" href="assets/lib/materialize/css/materialize.min.css" media="screen">
   <link rel="stylesheet" href="assets/css/index.css">
-
   <!--Title-->
   <title>Schedule IT</title>
 </head>
 <body>
+  <!--Login Modal Form-->
+  <div class="modal modal-fixed-footer" id="login-modal">
+    <div class="modal-content">
+      <div class="row">
+        <h4>Login</h4>
+        <form class="col s12">
+          <!--Username-->
+          <div class="row">
+            <div class="col s12 input-field">
+              <input class="validate" id="username" type="text">
+              <label for="username">Username</label>
+            </div>
+          </div>
+          <!--Password-->
+          <div class="row">
+            <div class="col s12 input-field">
+              <input class="validate" id="password" type="password">
+              <label for="password">Password</label>
+            </div>
+          </div>
+          <div class="row right">
+            <!--Cancel Button-->
+            <button class="btn modal-action modal-btn-cancel modal-close waves-effect waves-red green">
+              Cancel
+            </button>
+            <!--Login Button-->
+            <button class="btn modal-action modal-btn-submit modal-close waves-effect waves-light green"
+              id="login-btn" name="login-btn" type="submit">Login
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
   <!--Nav-->
-  <?php include('nav.php') ?>
+  <nav>
+    <div class="nav-wrapper green darken-4">
+      <!--Logo-->
+      <a href="#" class="brand-logo left">
+        <img src="assets/imgs/logo.jpg" alt="logo" class="responsive-img" id="logo"></a>
+      <!--Admin Panel Button-->
+      <a href="#" class="show-on-medium-and-up right" data-activates="panel" id="panel-btn">
+        <i class="material-icons">menu</i></a>
+      <!--Login Modal Button-->
+      <a class="btn modal-trigger waves-effect waves-light grey darken-3" id="login-modal-btn"
+        href="#login-modal">Login</a>
+    </div>
+  </nav>
+
+  <!--Admin Panel-->
+  <div id="panel">
+    <?php include('panel.php') ?>
+    <?php include('panel-modal-instructor.php'); ?>
+    <?php include('panel-modal-course.php'); ?>
+    <?php include('panel-modal-room.php'); ?>
+  </div>
 
   <!--Calendar Filters-->
   <div class="row">
@@ -61,6 +115,3 @@
   <script rel="text/javascript" src="assets/js/calendar.js"></script>
 </body>
 </html>
-
-<?php
-?>
