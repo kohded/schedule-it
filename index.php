@@ -45,8 +45,9 @@
 
   <!--Calendar-->
   <div class="row" id="main">
-      <div class="col s12">
-      <div id="calendar"></div>
+    <div class="col s12">
+      <div id="calendar">
+      </div>
     </div>
   </div>
 
