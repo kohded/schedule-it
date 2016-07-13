@@ -9,7 +9,7 @@ $(document).ready(function() {
   $('#login-modal-btn').leanModal();
 
   //Admin Panel
-  $("#panel-btn").click(function() {
-    $("#panel").slideToggle("fast");
+  $('#panel-btn').click(function() {
+    $('#panel').slideToggle('fast');
   });
 });

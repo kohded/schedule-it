@@ -39,7 +39,7 @@
           </button>
           <!--Login Button-->
           <button class="btn modal-action modal-btn-submit waves-effect waves-light green"
-             type="submit" name="send" id="send">Login
+            type="submit" name="send" id="send">Login
           </button>
         </div>
       </form>

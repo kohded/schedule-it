@@ -1,7 +1,7 @@
 <?php
 session_start();
+include('login/login2.php')
 ?>
-<?php include("login/login2.php")?>
 <!doctype html>
 <html lang="en">
 <head>
@@ -26,53 +26,57 @@ session_start();
       <a href="#" class="brand-logo left">
         <img src="assets/imgs/logo.jpg" alt="logo" class="responsive-img" id="logo"></a>
       
-<!--Disable hamburger button if not logged in and flip login to logout when logged in-->      
-<?php
-    if(isset($_SESSION['username']))
-    {
-      echo '<a href="#" class="show-on-medium-and-up right" data-activates="panel" id="panel-btn">
+      <!--Disable hamburger button if not logged in and flip login to logout when logged in-->
+      <?php
+      if(isset($_SESSION['username'])) {
+        echo '<a href="#" class="show-on-medium-and-up right" data-activates="panel" id="panel-btn">
         <i class="material-icons">menu</i></a>';
-        
-      echo '<a class="btn waves-effect waves-light grey darken-3" id="logout-modal-btn"
+
+        echo '<a class="btn waves-effect waves-light grey darken-3" id="logout-modal-btn"
          href="login/logout2.php">Logout</a>';
-    }
-    else
-    {
-      echo '<a class="btn modal-trigger waves-effect waves-light grey darken-3" id="login-modal-btn"
+      }
+      else {
+        echo '<a class="btn modal-trigger waves-effect waves-light grey darken-3" id="login-modal-btn"
         href="#login-modal">Login</a>';
-    }
-?>
+      }
+      ?>
     </div>
   </nav>
 
   <!--Admin Panel-->
   <div id="panel">
-    <?php include('panel.php') ?>
-    <?php include('panel-modal-instructor.php'); ?>
-    <?php include('panel-modal-course.php'); ?>
-    <?php include('panel-modal-room.php'); ?>
+    <?php
+    if(isset($_SESSION['username'])) {
+      include('panel.php');
+      include('panel-modal-instructor.php');
+      include('panel-modal-course.php');
+      include('panel-modal-room.php');
+    }
+    ?>
   </div>
 
   <!--Calendar Filters-->
   <div class="row">
-    <!--Campus-->
-    <div class="col s12 m2 input-field">
-      <select id="filter-campus" name="filter-campus">
-        <option value="auburn">Auburn</option>
-        <option value="kent">Kent</option>
-      </select>
-      <label>Campus</label>
-    </div>
-    <!--Room-->
-    <button class="btn-large waves-effect waves-light green"
-      id="filter-room" name="filter-room" type="submit">by Room
-      <i class="material-icons right">business</i>
-    </button>
-    <!--Instructor-->
-    <button class="btn-large waves-effect waves-light green"
-      id="filter-instructor" name="filter-instructor" type="submit">by Instructor
-      <i class="material-icons right">perm_identity</i>
-    </button>
+    <form id="filter-calendar">
+      <!--Campus-->
+      <div class="col s12 m2 input-field">
+        <select id="filter-campus">
+          <option value="auburn">Auburn</option>
+          <option value="kent">Kent</option>
+        </select>
+        <label>Campus</label>
+      </div>
+      <!--Room-->
+      <button class="btn-large waves-effect waves-light green"
+        id="filter-room" name="filter-room" type="submit">by Room
+        <i class="material-icons right">business</i>
+      </button>
+      <!--Instructor-->
+      <button class="btn-large waves-effect waves-light green"
+        id="filter-instructor" name="filter-instructor" type="submit">by Instructor
+        <i class="material-icons right">perm_identity</i>
+      </button>
+    </form>
   </div>
 
   <div class="divider"></div>

@@ -8,9 +8,9 @@ nav {
 }
 
 #login-modal-btn {
-  display    : inline;
-  float      : right;
-  margin-top : 14px;
+  display : inline;
+  float   : right;
+  margin  : 14px 10px 0 0;
 }
 
 #logout-modal-btn {
@@ -90,6 +90,18 @@ a {
 
 /****** SMALL GRID ******/
 @media only screen and (min-width : 0px) and (max-width : 600px) {
+  #login-modal-btn {
+    display : inline;
+    float   : right;
+    margin  : 10px 10px 0 0;
+  }
+
+  #logout-modal-btn {
+    display    : inline;
+    float      : right;
+    margin-top : 10px;
+  }
+
   #login-btn {
     margin-top : 10px;
   }
