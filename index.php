@@ -2,13 +2,6 @@
 session_start();
 ?>
 <?php include("login/login2.php")?>
-<?php
-if(!isset($_SESSION['username'])){
-   $disable = true;
-}else{
-   $disable = false;
-}
-?>
 <!doctype html>
 <html lang="en">
 <head>
@@ -33,13 +26,14 @@ if(!isset($_SESSION['username'])){
       <a href="#" class="brand-logo left">
         <img src="assets/imgs/logo.jpg" alt="logo" class="responsive-img" id="logo"></a>
       
+<!--Disable hamburger button if not logged in and flip login to logout when logged in-->      
 <?php
     if(isset($_SESSION['username']))
     {
-        echo '<a href="#" class="show-on-medium-and-up right" data-activates="panel" id="panel-btn">
+      echo '<a href="#" class="show-on-medium-and-up right" data-activates="panel" id="panel-btn">
         <i class="material-icons">menu</i></a>';
         
-        echo '<a class="btn waves-effect waves-light grey darken-3" id="logout-modal-btn"
+      echo '<a class="btn waves-effect waves-light grey darken-3" id="logout-modal-btn"
          href="login/logout2.php">Logout</a>';
     }
     else
