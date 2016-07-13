@@ -1,5 +1,16 @@
+<?php   
+    //Error reporting
+    //ini_set('display_errors', 1);
+    //error_reporting(E_ALL); 
+    session_start();
+if (!isset($_SESSION['username']))
+    header("Location: index.php");
+	
+    //Connect to DB
+    require '../db.php';
+?>
 <div class="row">
-  <form class="">
+  <form id="add-schedule-form">
     <div class="row">
       <!--Campus-->
       <div class="input-field col s4">

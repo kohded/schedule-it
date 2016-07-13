@@ -13,6 +13,12 @@ nav {
   margin-top : 14px;
 }
 
+#logout-modal-btn {
+  display    : inline;
+  float      : right;
+  margin-top : 14px;
+}
+
 /****** NAV ******/
 
 /****** PANEL ******/

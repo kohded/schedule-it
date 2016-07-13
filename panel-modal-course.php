@@ -1,3 +1,14 @@
+<?php   
+    //Error reporting
+    //ini_set('display_errors', 1);
+    //error_reporting(E_ALL); 
+    session_start();
+if (!isset($_SESSION['username']))
+    header("Location: index.php");
+	
+    //Connect to DB
+    require '../db.php';
+?>
 <!--Add Course Modal-->
 <div class="modal modal-fixed-footer" id="add-course-modal">
   <div class="modal-content">

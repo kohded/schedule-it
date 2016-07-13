@@ -1,3 +1,14 @@
+<?php
+session_start();
+?>
+<?php include("login/login2.php")?>
+<?php
+if(!isset($_SESSION['username'])){
+   $disable = true;
+}else{
+   $disable = false;
+}
+?>
 <!doctype html>
 <html lang="en">
 <head>
@@ -15,53 +26,28 @@
   <title>Schedule IT</title>
 </head>
 <body>
-  <!--Login Modal Form-->
-  <div class="modal modal-fixed-footer" id="login-modal">
-    <div class="modal-content">
-      <div class="row">
-        <h4>Login</h4>
-        <form class="col s12">
-          <!--Username-->
-          <div class="row">
-            <div class="col s12 input-field">
-              <input class="validate" id="username" type="text">
-              <label for="username">Username</label>
-            </div>
-          </div>
-          <!--Password-->
-          <div class="row">
-            <div class="col s12 input-field">
-              <input class="validate" id="password" type="password">
-              <label for="password">Password</label>
-            </div>
-          </div>
-          <div class="row right">
-            <!--Cancel Button-->
-            <button class="btn modal-action modal-btn-cancel modal-close waves-effect waves-red green">
-              Cancel
-            </button>
-            <!--Login Button-->
-            <button class="btn modal-action modal-btn-submit modal-close waves-effect waves-light green"
-              id="login-btn" name="login-btn" type="submit">Login
-            </button>
-          </div>
-        </form>
-      </div>
-    </div>
-  </div>
-
   <!--Nav-->
   <nav>
     <div class="nav-wrapper green darken-4">
       <!--Logo-->
       <a href="#" class="brand-logo left">
         <img src="assets/imgs/logo.jpg" alt="logo" class="responsive-img" id="logo"></a>
-      <!--Admin Panel Button-->
-      <a href="#" class="show-on-medium-and-up right" data-activates="panel" id="panel-btn">
-        <i class="material-icons">menu</i></a>
-      <!--Login Modal Button-->
-      <a class="btn modal-trigger waves-effect waves-light grey darken-3" id="login-modal-btn"
-        href="#login-modal">Login</a>
+      
+<?php
+    if(isset($_SESSION['username']))
+    {
+        echo '<a href="#" class="show-on-medium-and-up right" data-activates="panel" id="panel-btn">
+        <i class="material-icons">menu</i></a>';
+        
+        echo '<a class="btn waves-effect waves-light grey darken-3" id="logout-modal-btn"
+         href="login/logout2.php">Logout</a>';
+    }
+    else
+    {
+      echo '<a class="btn modal-trigger waves-effect waves-light grey darken-3" id="login-modal-btn"
+        href="#login-modal">Login</a>';
+    }
+?>
     </div>
   </nav>
 
