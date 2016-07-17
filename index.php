@@ -57,26 +57,24 @@ include('login/login2.php')
 
   <!--Calendar Filters-->
   <div class="row">
-    <form id="filter-calendar">
-      <!--Campus-->
-      <div class="col s12 m2 input-field">
-        <select id="filter-campus">
-          <option value="auburn">Auburn</option>
-          <option value="kent">Kent</option>
-        </select>
-        <label>Campus</label>
-      </div>
-      <!--Room-->
-      <button class="btn-large waves-effect waves-light green"
-        id="filter-room" name="filter-room" type="submit">by Room
-        <i class="material-icons right">business</i>
-      </button>
-      <!--Instructor-->
-      <button class="btn-large waves-effect waves-light green"
-        id="filter-instructor" name="filter-instructor" type="submit">by Instructor
-        <i class="material-icons right">perm_identity</i>
-      </button>
-    </form>
+    <!--Campus-->
+    <div class="col s12 m2 input-field">
+      <select id="filter-campus">
+        <option value="auburn">Auburn</option>
+        <option value="kent">Kent</option>
+      </select>
+      <label>Campus</label>
+    </div>
+    <!--Room-->
+    <button class="btn-large waves-effect waves-light green"
+      id="filter-room" name="filter-room">by Room
+      <i class="material-icons right">business</i>
+    </button>
+    <!--Instructor-->
+    <button class="btn-large waves-effect waves-light green"
+      id="filter-instructor" name="filter-instructor">by Instructor
+      <i class="material-icons right">perm_identity</i>
+    </button>
   </div>
 
   <div class="divider"></div>
