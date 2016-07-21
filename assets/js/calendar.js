@@ -1,16 +1,18 @@
 //Calendar elements
 var el = {
-  calendar: $('#calendar'),
-  filterRI: $('#filter-room, #filter-instructor'),
-  filterC : $("#filter-campus")
+  calendarId: '',
+  filterRI  : $('#filter-room, #filter-instructor'),
+  filterC   : $("#filter-campus")
 };
 
 //Calendar object
 var calendar = {
   courses: '', //Courses returned from the db
   zone   : "08:00",  //Timezone
-  init   : function() {
-    el.calendar.fullCalendar({
+  init   : function(calendarId) {
+    let thisCalendar = $('#' + calendarId);
+
+    thisCalendar.fullCalendar({
       allDaySlot        : false, //All day slot on top of week/day view
       allDayText        : false, //All day slot text
       aspectRatio       : 1.35, //Default is 1.35
@@ -19,14 +21,14 @@ var calendar = {
         prevQtr: { //Previous quarter button
           themeIcon: 'circle-triangle-w',
           click    : function() {
-            el.calendar.fullCalendar('incrementDate',
+            thisCalendar.fullCalendar('incrementDate',
               moment.duration(-7, 'days'));
           }
         },
         nextQtr: { //Next quarter button
           themeIcon: 'circle-triangle-e',
           click    : function() {
-            el.calendar.fullCalendar('incrementDate',
+            thisCalendar.fullCalendar('incrementDate',
               moment.duration(7, 'days'));
           }
         }
@@ -35,7 +37,7 @@ var calendar = {
       droppable         : false, //jQueryUI draggable can be dropped onto
                                  // calendar
       editable          : false, //Events on the calendar can be modified
-      events            : JSON.parse(this.courses),
+      events            : this.courses,
       eventRender       : function(event, element) {
         element.find('.fc-title').append("<br/>" + event.instructor);
         element.find('.fc-title').append("<br/>" + event.roomNumber);
@@ -88,22 +90,47 @@ var courses = {
       data   : 'type=selectCampusCourses&campus=' + campus + '&filter=' +
       filter,
       success: function(c) {
-        calendar.courses = c;
-        //console.log(calendar.courses);
-        //console.log(JSON.parse(calendar.courses));
+        //Parse json encode returned from PHP.
+        let filteredCourses = JSON.parse(c);
 
-        //Initialize calendar only once when first filtering is executed.
-        if(courses.isFiltered === false) {
-          calendar.init();
-          courses.isFiltered = true;
-        }
-        //After first filtering, remove old data and re-render new data based on
-        // the users filtering preferences.
-        else {
-          //Remove events from calendar.
-          el.calendar.fullCalendar('removeEvents');
-          //Reload changes from filter.
-          el.calendar.fullCalendar('addEventSource', JSON.parse(c));
+        //Iterate through filtered courses.
+        for(let i = 0; i < filteredCourses.length; i++) {
+          //Dynamically generate the calendar div id.
+          el.calendarId = 'calendar' + i;
+
+          //Check if calendar div already exists, if true append new div.
+          if(!document.getElementById(el.calendarId)) {
+            //Dynamically generate divs for each calendar with the previous
+            // el.calendarId. Each calendar must have its own div with a unique
+            // id, then each calendar will append inside the calendars div when
+            // the calendar is initialized with javascript.
+            $('#calendars').append(
+              '<div id="' + el.calendarId + '" class="col s12 calendar"></div>'
+            );
+          }
+
+          //Initialize each calendar only once when first filtering is executed.
+          if(courses.isFiltered === false) {
+            //Set one array of course objects filtered by room or instructor.
+            calendar.courses = filteredCourses[i];
+            //Initialize the calendar with the generated el.calendarId.
+            calendar.init(el.calendarId);
+
+            //On the last element set isFiltered to true.
+            if(i === filteredCourses.length - 1) {
+              courses.isFiltered = true;
+            }
+          }
+          //After initialization of calendars, only update data by removing
+          // old data and re-rendering new data based on users filter input.
+          else {
+            let thisCalendar = $('#' + el.calendarId);
+
+            //Remove previous courses from calendar.
+            thisCalendar.fullCalendar('removeEvents');
+            //Reload changes from filter button click.
+            thisCalendar.fullCalendar('addEventSource', filteredCourses[i]);
+          }
         }
       },
       error  : function(e) {
@@ -116,8 +143,8 @@ var courses = {
 $(document).ready(function() {
   //Filter calendar by clicking the room or instructor button.
   el.filterRI.click(function() {
-    //Get campus from select input.
-    var campus = el.filterC.find("option:selected").val();
+    //Get campus from select input value.
+    let campus = el.filterC.find("option:selected").val();
 
     //If BY ROOM button is clicked.
     if(this.id == 'filter-room') {

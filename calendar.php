@@ -1,16 +1,20 @@
 <?php
 include('../config.php');
 
-$type = $_POST['type'];
-$campus = $_POST['campus'];
-$filter = $_POST['filter'];
+//Check if post is sent from ajax call.
+if(isset($_POST['type']) || isset($_POST['campus']) || isset($_POST['filter'])) {
+  $type = $_POST['type'];
+  $campus = $_POST['campus'];
+  $filter = $_POST['filter'];
 
-switch($type) {
-  case ($type === 'selectCampusCourses') :
-    selectCampusCourses();
-    break;
-  default:
-    break;
+  //Select method based on type parameter.
+  switch($type) {
+    case 'selectCampusCourses' :
+      selectCampusCourses();
+      break;
+    default:
+      break;
+  }
 }
 
 /**
@@ -20,12 +24,12 @@ function selectCampusCourses() {
   global $campus;
   global $filter;
 
-  //Concatenate $campus to values in statement to dynamically change between Auburn and Kent.
+  // Concatenate $campus to values in statement to dynamically change between Auburn and Kent.
   $campusCourse = $campus . '_course';
   $campusCourseId = $campus . '_course_id';
   $campusCourseDay = $campus . '_course_day';
-  
-  //Dynamically change the ORDER BY value based on what filter button was clicked.
+
+  // Dynamically change the ORDER BY value based on what filter button was clicked.
   $filterVal = '';
   if($filter === 'room') {
     $filterVal = 'room.room_number';
@@ -47,37 +51,75 @@ function selectCampusCourses() {
     INNER JOIN $campusCourseDay ON $campusCourse.$campusCourseId= $campusCourseDay.$campusCourseId
     ORDER BY $filterVal ASC";
 
-  //Connect to database.
+  // Connect to database.
   $dbh = dbConnect();
   $statement = $dbh->prepare($stmt);
   $statement->execute();
 
-  //Process the results.
+  // Process the results.
   $result = $statement->fetchAll(PDO::FETCH_ASSOC);
 
   selectCampusCoursesResults($result, $campusCourseId);
 
-  //Close the connection.
+  // Close the connection.
   $dbh = null;
 }
 
 function selectCampusCoursesResults($result, $id) {
+  global $filter;
+  $filterTemp = '';
   $courses = array();
-  
-  //Iterate through results.
+  $coursesTemp = array();
+
   foreach($result as $row) {
-    $e = array();
-    $e['id'] = $row[$id];
-    $e['title'] = $row['course_number'];
-    $e['instructor'] = $row['first_name'] . ' ' . $row['last_name'];
-    $e['roomNumber'] = $row['room_number'];
-    $e['start'] = $row['start_time'];
-    $e['end'] = $row['end_time'];
+    $course = array();
+    $course['id'] = $row[$id];
+    $course['title'] = $row['course_number'];
+    $course['instructor'] = $row['first_name'] . ' ' . $row['last_name'];
+    $course['roomNumber'] = $row['room_number'];
+    $course['start'] = $row['start_time'];
+    $course['end'] = $row['end_time'];
 
-    $courses[] = $e;
+    // Set initial filterTemp if empty. Stores the previous value when grouping by instructor or room.
+    if(!$filterTemp) {
+      if($filter === 'room') {
+        $filterTemp = $row['room_number'];
+      }
+      elseif($filter === 'instructor') {
+        $filterTemp = $row['last_name'];
+      }
+    }
+
+    // If the same room or instructor when comparing filterTemp to the current row.
+    if($filterTemp === $row['room_number'] || $filterTemp === $row['last_name']) {
+      // Add course array to coursesTemp array of the current row.
+      $coursesTemp[] = $course;
+    }
+    // If not the same room or instructor when comparing filterTemp to the current row.
+    else {
+      // Add coursesTemp with the same room or instructor to the courses array.
+      $courses[] = $coursesTemp;
+      // Clear coursesTemp to store the next rooms or instructor that are the same.
+      unset($coursesTemp);
+      // Add course array to coursesTemp array of the current row.
+      $coursesTemp[] = $course;
+
+      // Reset filterTemp to the new room or instructor of the current row.
+      if($filter === 'room') {
+        $filterTemp = $row['room_number'];
+      }
+      elseif($filter === 'instructor') {
+        $filterTemp = $row['last_name'];
+      }
+    }
   }
+  
+  // Adds the last group in coursesTemp array to courses array. When the foreach loop ends the last
+  // coursesTemp group isn't added.
+  $courses[] = $coursesTemp;
+  unset($coursesTemp);
 
-  //Output json encode of courses.
+  // Output json encode of courses.
   echo json_encode($courses);
 }
 

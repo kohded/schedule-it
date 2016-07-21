@@ -42,8 +42,12 @@ nav {
 /****** PANEL ******/
 
 /****** CALENDAR ******/
-#calendar {
-  margin-top : 30px;
+#calendar-filters {
+  margin-bottom : 5px;
+}
+
+.calendar {
+  margin-top : 40px;
 }
 
 /****** GLOBAL ******/

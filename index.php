@@ -56,7 +56,7 @@ include('login/login2.php')
   </div>
 
   <!--Calendar Filters-->
-  <div class="row">
+  <div class="row" id="calendar-filters">
     <!--Campus-->
     <div class="col s12 m2 input-field">
       <select id="filter-campus">
@@ -79,13 +79,8 @@ include('login/login2.php')
 
   <div class="divider"></div>
 
-  <!--Calendar-->
-  <div class="row" id="main">
-    <div class="col s12">
-      <div id="calendar">
-      </div>
-    </div>
-  </div>
+  <!--Calendars Container-->
+  <div class="row" id="calendars"></div>
 
   <!--Scripts-->
   <script rel="text/javascript" src="assets/lib/jquery/jquery-3.0.0.min.js"></script>
