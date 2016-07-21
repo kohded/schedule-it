@@ -39,8 +39,16 @@ var calendar = {
       editable          : false, //Events on the calendar can be modified
       events            : this.courses,
       eventRender       : function(event, element) {
-        element.find('.fc-title').append("<br/>" + event.instructor);
-        element.find('.fc-title').append("<br/>" + event.roomNumber);
+        //Display room or instructor for each course, based on filter.
+        if(event.title === event.roomNumber) {
+          element.find('.fc-title').append("<br/>" + event.instructor);
+        }
+        else {
+          element.find('.fc-title').append("<br/>" + event.roomNumber);
+        }
+
+        //Display course number
+        element.find('.fc-title').append("<br/>" + event.courseNumber);
       },
       fixedWeekCount    : false, //Default is 6 weeks fixed
       handleWindowResize: true, //Resize calendar on browser resize
@@ -56,7 +64,7 @@ var calendar = {
       slotDuration      : '00:30:00', //Duration of each slot on week/day view
       slotEventOverlap  : false, //Overlap slot
       snapDuration      : '00:10:00', //Duration of each snap
-      titleFormat       : '[AC 102]',
+      titleFormat       : '[]',
       theme             : true, //Calendar theme
       utc               : true, //Store event timezone info and display in UTC
       views             : {
@@ -95,25 +103,39 @@ var courses = {
 
         //Iterate through filtered courses.
         for(let i = 0; i < filteredCourses.length; i++) {
+          //Set one array of course objects filtered by room or instructor.
+          calendar.courses = filteredCourses[i];
+
           //Dynamically generate the calendar div id.
           el.calendarId = 'calendar' + i;
-
           //Check if calendar div already exists, if true append new div.
           if(!document.getElementById(el.calendarId)) {
-            //Dynamically generate divs for each calendar with the previous
-            // el.calendarId. Each calendar must have its own div with a unique
-            // id, then each calendar will append inside the calendars div when
-            // the calendar is initialized with javascript.
+            //Dynamically generate title and divs for each calendar with the
+            // previous el.calendarId. Each calendar must have its own div
+            // with a unique id, then each calendar will append inside the
+            // calendars div when the calendar is initialized with javascript.
             $('#calendars').append(
-              '<div id="' + el.calendarId + '" class="col s12 calendar"></div>'
+              '<div class="calendar-card col s12">' +
+              '<div class="card clearfix">' +
+              '<div class="card-content green white-text">' +
+              '<span  class="calendar-title card-title" ' +
+              'id=calendar-title' + i + '>' + calendar.courses[0].title +
+              '</span>' +
+              '<div id="' + el.calendarId +
+              '" class="col s12 calendar"></div>' +
+              '</div>' +
+              '</div>' +
+              '</div>'
             );
+          }
+          else {
+            //Dynamically change title by room number or instructors last name.
+            $('#calendar-title' + i).text(calendar.courses[0].title);
           }
 
           //Initialize each calendar only once when first filtering is executed.
           if(courses.isFiltered === false) {
-            //Set one array of course objects filtered by room or instructor.
-            calendar.courses = filteredCourses[i];
-            //Initialize the calendar with the generated el.calendarId.
+            //Initialize the calendars with the generated el.calendarId.
             calendar.init(el.calendarId);
 
             //On the last element set isFiltered to true.

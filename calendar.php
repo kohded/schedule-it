@@ -74,12 +74,13 @@ function selectCampusCoursesResults($result, $id) {
   foreach($result as $row) {
     $course = array();
     $course['id'] = $row[$id];
-    $course['title'] = $row['course_number'];
+    $course['title'] = ($filter === 'room') ? $row['room_number'] : $row['first_name'] . ' ' . $row['last_name'];
+    $course['courseNumber'] = $row['course_number'];
     $course['instructor'] = $row['first_name'] . ' ' . $row['last_name'];
     $course['roomNumber'] = $row['room_number'];
     $course['start'] = $row['start_time'];
     $course['end'] = $row['end_time'];
-
+    
     // Set initial filterTemp if empty. Stores the previous value when grouping by instructor or room.
     if(!$filterTemp) {
       if($filter === 'room') {

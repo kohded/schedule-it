@@ -46,8 +46,16 @@ nav {
   margin-bottom : 5px;
 }
 
+.calendar-card {
+  margin-top : 10px;
+}
+
 .calendar {
-  margin-top : 40px;
+  margin : 35px 0 30px 0;
+}
+
+.calendar-title {
+  margin-left : 10px;
 }
 
 /****** GLOBAL ******/
@@ -88,6 +96,10 @@ a {
 /*Modal*/
 .modal form.col.s12 {
   padding : 0;
+}
+
+.clearfix {
+  overflow : auto;
 }
 
 /****** GLOBAL ******/
