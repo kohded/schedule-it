@@ -1,6 +1,6 @@
 <?php
 session_start();
-include('login/login2.php')
+include('login/login2.php');
 ?>
 <!doctype html>
 <html lang="en">
@@ -42,6 +42,9 @@ include('login/login2.php')
       ?>
     </div>
   </nav>
+
+  <!--Login Modal-->
+  <?php include('login/login.php'); ?>
 
   <!--Admin Panel-->
   <div id="panel">

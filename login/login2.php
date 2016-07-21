@@ -40,6 +40,4 @@ if($_SERVER['REQUEST_METHOD'] == 'POST') {
   
 } // End of the main submit conditional.
 
-// Create the page:
-include('login.php');
 ?>
