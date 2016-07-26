@@ -33,6 +33,7 @@ var calendar = {
           }
         }
       },
+      defaultDate       : '2016-07-18', //dates.defaultDate(),
       defaultView       : 'agendaWeek', //Default view on load
       droppable         : false, //jQueryUI draggable can be dropped onto
                                  // calendar
@@ -155,8 +156,8 @@ var courses = {
           }
         }
       },
-      error  : function(e) {
-        alert(e);
+      error  : function(error) {
+        console.log(error);
       }
     });
   }
