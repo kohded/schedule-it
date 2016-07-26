@@ -90,6 +90,7 @@ var calendar = {
 
 //Ajax calls to PHP file that get courses data from MySql queries.
 var courses = {
+  filterClick: '',
   isFiltered         : false,
   //Display Auburn or Kent courses by room or instructor.
   selectCampusCourses: function(campus, filter) {
@@ -171,10 +172,12 @@ $(document).ready(function() {
 
     //If BY ROOM button is clicked.
     if(this.id == 'filter-room') {
+      courses.filterClick = 'room';
       courses.selectCampusCourses(campus, 'room');
     }
     //If BY INSTRUCTOR button is clicked.
     else if(this.id == 'filter-instructor') {
+      courses.filterClick = 'instructor';
       courses.selectCampusCourses(campus, 'instructor')
     }
   });

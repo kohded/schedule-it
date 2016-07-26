@@ -227,7 +227,7 @@ var courseForm = {
     let room         = $('#select-room option:selected').val();
     let dayIds       = []; //Stores parent row id of day(s) and time.
     let startEndTime = []; //
-    let courseDays    = [];
+    let courseDays   = [];
 
     //Iterate through all select inputs and get the ids.
     $.each($('[id^="day-"]'), function() {
@@ -344,16 +344,27 @@ var courseForm = {
       '&courseDays=' + JSON.stringify(courseDays), //Stringify array before pass
       dataType: 'json',
       success : function(response) {
-        //console.log(response);
-        //console.log(response.campus);
-        //event.id = response.id;
-        //
-        //if(response.campus === 'auburn') {
-        //}
-        //else if(response.campus === 'kent') {
-        //}
-        //$('#calendar').fullCalendar('removeEvents',event);
-        //$('#calendar').fullCalendar('addEventSource',event);
+        //Get the campus where the course was just inserted from the response.
+        let responseCampus = response.campus;
+
+        //Based on campus and what filter has been clicked, if any, call
+        // courses.selectCampusCourses and reload new course data into calendar.
+        if(responseCampus === 'auburn') {
+          if(courses.filterClick === 'room') {
+            courses.selectCampusCourses(responseCampus, 'room');
+          }
+          if(courses.filterClick === 'instructor') {
+            courses.selectCampusCourses(responseCampus, 'instructor')
+          }
+        }
+        else if(responseCampus === 'kent') {
+          if(courses.filterClick === 'room') {
+            courses.selectCampusCourses(responseCampus, 'room')
+          }
+          if(courses.filterClick === 'instructor') {
+            courses.selectCampusCourses(responseCampus, 'instructor')
+          }
+        }
       },
       error   : function(error) {
         console.log(error);
