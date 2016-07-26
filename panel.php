@@ -1,4 +1,6 @@
-<?php if(isset($_SESSION['username'])) { ?>
+<?php
+include_once('../config.php');
+if(isset($_SESSION['username'])) { ?>
   <!--Admin Panel-->
   <div class="row">
     <!--<form id="course-form" method="post">-->
@@ -45,8 +47,7 @@
       <div class="col s2 input-field">
         <select id="select-instructor" required>
           <option value="" disabled selected>Select</option>
-          <option value="1">Tina Ostrander</option>
-          <option value="2">Josh Archer</option>
+          <?php displayAllInstructors(); ?>
         </select>
         <label for="select-instructor">Instructor</label>
       </div>
@@ -63,8 +64,7 @@
       <div class="input-field col s2">
         <select id="select-course" required>
           <option value="" disabled selected>Select</option>
-          <option value="1">IT 301</option>
-          <option value="7">IT 405</option>
+          <?php displayAllCourses(); ?>
         </select>
         <label for="select-course">Course</label>
       </div>
@@ -81,8 +81,7 @@
       <div class="input-field col s2">
         <select id="select-room" required>
           <option value="" disabled selected>Select</option>
-          <option value="2">TC 108</option>
-          <option value="3">TC 118</option>
+          <?php displayAllRooms(); ?>
         </select>
         <label for="select-room">Room</label>
       </div>
@@ -213,3 +212,61 @@
     <!--</form>-->
   </div>
 <?php } ?>
+
+<?php
+
+function displayAllInstructors(){
+
+  $dbh = dbConnect();
+
+  $sql = "SELECT * FROM instructor ORDER BY last_name ASC";
+
+  $statement = $dbh->prepare($sql);
+  $statement->execute();
+
+  $result = $statement ->fetchAll(PDO::FETCH_ASSOC);
+
+  foreach($result as $row){
+    echo "<option value=\"" . $row['instructor_id'] . "\">" . $row['first_name'] . ' ' . $row['last_name'] . "</option>";
+  }
+  $dbh = null;
+
+}
+
+function displayAllCourses(){
+
+  $dbh = dbConnect();
+
+  $sql = "SELECT * FROM course ORDER BY course_number ASC";
+
+  $statement = $dbh->prepare($sql);
+  $statement->execute();
+
+  $result = $statement ->fetchAll(PDO::FETCH_ASSOC);
+
+  foreach($result as $row){
+    echo "<option value=\"" . $row['course_id'] . "\">" . $row['course_number'] . "</option>";
+  }
+
+  $dbh = null;
+
+}
+
+function displayAllRooms(){
+
+  $dbh = dbConnect();
+
+  $sql = "SELECT * FROM room ORDER BY room_number ASC";
+
+  $statement = $dbh->prepare($sql);
+  $statement->execute();
+
+  $result = $statement ->fetchAll(PDO::FETCH_ASSOC);
+
+  foreach($result as $row){
+    echo "<option value=\"" . $row['room_id'] . "\">" . $row['room_number'] . "</option>";;
+  }
+  $dbh = null;
+
+}
+?>
