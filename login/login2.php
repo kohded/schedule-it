@@ -6,38 +6,34 @@
 // Send NOTHING to the Web browser prior to the setcookie() lines!
 
 // Check if the form has been submitted:
-if($_SERVER['REQUEST_METHOD'] == 'POST') {
-  
+if(isset($_POST['user']) || isset($_POST['pass'])) {
   // For processing the login:
-  require('loginfunction.php');
-  
+  include('loginfunction.php');
+
   // Need the database connection:
-  require('../db.php');
-  
+  include('../db.php');
+
+  $user = $_POST['user'];
+  $pass = $_POST['pass'];
+
   // Check the login:
-  list ($check, $data) = check_login($cnxn, $_POST['user'], $_POST['pass']);
-  
+  list ($check, $data) = check_login($cnxn, $user, $pass);
+
   if($check) { // OK!
-    
     // Set the cookies:
     setcookie('user', $data['user']);
-    //set cookie ('first_name', $data['first_name']);
     //set sessions
-    $_SESSION['username'] = $_POST['user'];
+    $_SESSION['username'] = $user;
     // Redirect:
     redirect_user('index.php');
-    
+
   }
   else { // Unsuccessful!
-    
-    // Assign $data to $errors for error reporting
-    // in the login_page.inc.php file.
+    // Assign $data to $errors for error reporting.
     $errors = $data;
-    
   }
-  
+
   mysqli_close($cnxn); // Close the database connection.
-  
 } // End of the main submit conditional.
 
 ?>

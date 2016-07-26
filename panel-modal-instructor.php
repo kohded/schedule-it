@@ -4,7 +4,7 @@
     <div class="modal-content">
       <div class="row">
         <h4>Add Instructor</h4>
-        <form action="panel-modal-instructor.php" class="col s12" method="POST">
+        <form action="index.php" class="col s12" method="POST">
           <div id="instructor-name">
             <div class="row">
               <!--First Name-->

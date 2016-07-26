@@ -2,7 +2,7 @@
   <div class="modal-content">
     <div class="row">
       <h4>Login</h4>
-      <form class="col s12" method="post">
+      <form action="index.php" class="col s12" method="post">
         <!--Username-->
         <div class="row">
           <div class="col s12 input-field">
