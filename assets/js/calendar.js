@@ -1,5 +1,6 @@
 //Calendar elements
 var el = {
+  calendars : $("#calendars"),
   calendarId: '',
   filterRI  : $('#filter-room, #filter-instructor'),
   filterC   : $("#filter-campus")
@@ -37,8 +38,9 @@ var calendar = {
       defaultView       : 'agendaWeek', //Default view on load
       droppable         : false, //jQueryUI draggable can be dropped onto
                                  // calendar
-      editable          : false, //Events on the calendar can be modified
+      editable          : true, //Events on the calendar can be modified
       events            : this.courses,
+      eventOverlap      : false, //Event overlap
       eventRender       : function(event, element) {
         //Display room or instructor for each course, based on filter.
         if(event.title === event.roomNumber) {
@@ -50,6 +52,27 @@ var calendar = {
 
         //Display course number
         element.find('.fc-title').append("<br/>" + event.courseNumber);
+      },
+      eventResize       : function(event, delta, revertFunc) {
+        let end   = event.end.format();
+        let start = event.start.format();
+
+        $.ajax({
+          url     : 'calendar-event.php',
+          type    : 'POST',
+          data    : 'type=updateStartEnd&campus=' + courses.campus +
+          '&eventId=' + event.id + '&start=' + start + '&end=' + end,
+          dataType: 'json',
+          success : function(response) {
+            if(response.status != 'success') {
+              revertFunc();
+            }
+          },
+          error   : function(error) {
+            revertFunc();
+            console.log('Couldn\'t change time: ' + error.responseText);
+          }
+        });
       },
       fixedWeekCount    : false, //Default is 6 weeks fixed
       handleWindowResize: true, //Resize calendar on browser resize
@@ -90,8 +113,8 @@ var calendar = {
 
 //Ajax calls to PHP file that get courses data from MySql queries.
 var courses = {
-  filterClick: '',
-  isFiltered         : false,
+  campus             : '',
+  filterClick        : '',
   //Display Auburn or Kent courses by room or instructor.
   selectCampusCourses: function(campus, filter) {
     $.ajax({
@@ -109,15 +132,17 @@ var courses = {
           calendar.courses = filteredCourses[i];
 
           //Dynamically generate the calendar div id.
-          el.calendarId = 'calendar' + i;
-          //Check if calendar div already exists, if true append new div.
+          el.calendarId = 'calendar--' + i;
+
+          //Check if calendar div already exists, if false append new calendar.
           if(!document.getElementById(el.calendarId)) {
             //Dynamically generate title and divs for each calendar with the
             // previous el.calendarId. Each calendar must have its own div
             // with a unique id, then each calendar will append inside the
             // calendars div when the calendar is initialized with javascript.
-            $('#calendars').append(
-              '<div class="calendar-card col s12">' +
+            el.calendars.append(
+              '<div class="calendar-card col s12" id="calendar-card--' + i +
+              '">' +
               '<div class="card clearfix">' +
               '<div class="card-content green white-text">' +
               '<span  class="calendar-title card-title" ' +
@@ -129,31 +154,40 @@ var courses = {
               '</div>' +
               '</div>'
             );
-          }
-          else {
-            //Dynamically change title by room number or instructors last name.
-            $('#calendar-title' + i).text(calendar.courses[0].title);
-          }
 
-          //Initialize each calendar only once when first filtering is executed.
-          if(courses.isFiltered === false) {
-            //Initialize the calendars with the generated el.calendarId.
+            //Initialize the calendar with generated calendar id.
             calendar.init(el.calendarId);
-
-            //On the last element set isFiltered to true.
-            if(i === filteredCourses.length - 1) {
-              courses.isFiltered = true;
-            }
           }
           //After initialization of calendars, only update data by removing
           // old data and re-rendering new data based on users filter input.
           else {
-            let thisCalendar = $('#' + el.calendarId);
+            //Dynamically change title by room number or instructors last name.
+            $('#calendar-title' + i).text(calendar.courses[0].title);
+
+            let thisCalendarId = $('#' + el.calendarId);
 
             //Remove previous courses from calendar.
-            thisCalendar.fullCalendar('removeEvents');
+            thisCalendarId.fullCalendar('removeEvents');
             //Reload changes from filter button click.
-            thisCalendar.fullCalendar('addEventSource', filteredCourses[i]);
+            thisCalendarId.fullCalendar('addEventSource', filteredCourses[i]);
+
+            //BUG IDS GET REARRANGED ON REMOVAL
+            //Remove additional calendar object(s) from the previous
+            // filtering if there are more than a new filtering. Because the
+            // calendar objects are being reused, the additional ones will show
+            // at the bottom.
+            //let calendarObjectCount = $('[id^="calendar--"]').length;
+            //if(calendarObjectCount > filteredCourses.length) {
+            //  //Start calendar id at filtered courses length.
+            //  let removeId = filteredCourses.length;
+            //
+            //  for(let i = removeId; i < calendarObjectCount; i++) {
+            //    //Destroy additional calendar object from previous search.
+            //    $('#calendar--' + removeId).fullCalendar('destroy');
+            //    //Remove calendar card div.
+            //    $('#calendar-card--' + removeId).hide();
+            //  }
+            //}
           }
         }
       },
@@ -168,17 +202,17 @@ $(document).ready(function() {
   //Filter calendar by clicking the room or instructor button.
   el.filterRI.click(function() {
     //Get campus from select input value.
-    let campus = el.filterC.find("option:selected").val();
+    courses.campus = el.filterC.find("option:selected").val();
 
     //If BY ROOM button is clicked.
     if(this.id == 'filter-room') {
       courses.filterClick = 'room';
-      courses.selectCampusCourses(campus, 'room');
+      courses.selectCampusCourses(courses.campus, 'room');
     }
     //If BY INSTRUCTOR button is clicked.
     else if(this.id == 'filter-instructor') {
       courses.filterClick = 'instructor';
-      courses.selectCampusCourses(campus, 'instructor')
+      courses.selectCampusCourses(courses.campus, 'instructor')
     }
   });
 });

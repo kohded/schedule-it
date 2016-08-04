@@ -25,58 +25,37 @@ if(isset($_POST['type']) || isset($_POST['campus']) || isset($_POST['instructor'
 function insertCourse($campus, $instructor, $course, $room, $courseDays) {
   //Connect to database
   $dbh = dbConnect();
-
-  //Build sql insert query for campus course.
-  if($campus === 'auburn') {
-    $sqlCourse = 'INSERT INTO auburn_course(instructor_id, course_id, room_id) VALUES (:instructor, :course, :room)';
-  }
-  else {
-    if($campus === 'kent') {
-      $sqlCourse = 'INSERT INTO kent_course(instructor_id, course_id, room_id) VALUES (:instructor, :course, :room)';
-    }
-  }
-
-  //Prepare the statement.
-  $statement = $dbh->prepare($sqlCourse);
-  //Bind the parameters
-  $statement->bindParam(':instructor', $instructor, PDO::PARAM_STR);
-  $statement->bindParam(':course', $course, PDO::PARAM_STR);
-  $statement->bindParam(':room', $room, PDO::PARAM_STR);
-
-  //Execute campus course.
-  $statement->execute();
-
-  //Return the id of the last row that was inserted.
-  $lastId = $dbh->lastInsertId();
+  $insertCourse = '';
 
   //Iterate through courseDays array.
   for($row = 0, $size = count($courseDays); $row < $size; ++$row) {
     //Build sql insert query for campus course day.
     if($campus === 'auburn') {
-      $sqlCourseDay = 'INSERT INTO auburn_course_day(auburn_course_id, start_time, end_time) VALUES (:auburnCourseId, :startTime, :endTime)';
-
-      //Prepare the statement.
-      $statement = $dbh->prepare($sqlCourseDay);
-      //Bind the parameters
-      $statement->bindParam(':auburnCourseId', $lastId, PDO::PARAM_STR);
-      $statement->bindParam(':startTime', $courseDays[$row][0], PDO::PARAM_STR);
-      $statement->bindParam(':endTime', $courseDays[$row][1], PDO::PARAM_STR);
+      $insertCourse = 'INSERT INTO auburn_course(instructor_id, room_id, course_id, start_time, end_time) 
+                        VALUES (:instructor, :room, :course, :startTime, :endTime)';
     }
     else {
       if($campus === 'kent') {
-        $sqlCourseDay = 'INSERT INTO kent_course_day(kent_course_id, start_time, end_time) VALUES (:kentCourseId, :startTime, :endTime)';
-
-        //Prepare the statement.
-        $statement = $dbh->prepare($sqlCourseDay);
-        //Bind the parameters.
-        $statement->bindParam(':kentCourseId', $lastId, PDO::PARAM_STR);
-        $statement->bindParam(':startTime', $courseDays[$row][0], PDO::PARAM_STR);
-        $statement->bindParam(':endTime', $courseDays[$row][1], PDO::PARAM_STR);
+        $insertCourse = 'INSERT INTO kent_course(instructor_id, room_id, course_id, start_time, end_time) 
+                            VALUES (:instructor, :room, :course, :startTime, :endTime)';
       }
     }
 
-    //Execute campus course day.
+    //Prepare the statement.
+    $statement = $dbh->prepare($insertCourse);
+
+    //Bind the parameters.
+    $statement->bindParam(':instructor', $instructor, PDO::PARAM_STR);
+    $statement->bindParam(':room', $room, PDO::PARAM_STR);
+    $statement->bindParam(':course', $course, PDO::PARAM_STR);
+    $statement->bindParam(':startTime', $courseDays[$row][0], PDO::PARAM_STR);
+    $statement->bindParam(':endTime', $courseDays[$row][1], PDO::PARAM_STR);
+
+    //Execute campus course.
     $statement->execute();
+
+    //Return the id of the last row that was inserted.
+    $lastId = $dbh->lastInsertId();
   }
 
   //Return the id and campus in the success response.

@@ -27,7 +27,7 @@ function selectCampusCourses() {
   // Concatenate $campus to values in statement to dynamically change between Auburn and Kent.
   $campusCourse = $campus . '_course';
   $campusCourseId = $campus . '_course_id';
-  $campusCourseDay = $campus . '_course_day';
+  // $campusCourseDay = $campus . '_course_day';
 
   // Dynamically change the ORDER BY value based on what filter button was clicked.
   $filterVal = '';
@@ -43,12 +43,11 @@ function selectCampusCourses() {
     instructor.first_name, instructor.last_name,
     course.course_number,
     room.room_number,
-    $campusCourseDay.start_time, $campusCourseDay.end_time
+    $campusCourse.start_time, $campusCourse.end_time
     FROM $campusCourse
     INNER JOIN instructor ON $campusCourse.instructor_id = instructor.instructor_id
     INNER JOIN course ON $campusCourse.course_id = course.course_id
     INNER JOIN room ON $campusCourse.room_id = room.room_id
-    INNER JOIN $campusCourseDay ON $campusCourse.$campusCourseId= $campusCourseDay.$campusCourseId
     ORDER BY $filterVal ASC";
 
   // Connect to database.

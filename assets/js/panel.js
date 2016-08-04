@@ -351,17 +351,21 @@ var courseForm = {
         // courses.selectCampusCourses and reload new course data into calendar.
         if(responseCampus === 'auburn') {
           if(courses.filterClick === 'room') {
+            courses.filterClick = 'room';
             courses.selectCampusCourses(responseCampus, 'room');
           }
           if(courses.filterClick === 'instructor') {
+            courses.filterClick = 'instructor';
             courses.selectCampusCourses(responseCampus, 'instructor')
           }
         }
         else if(responseCampus === 'kent') {
           if(courses.filterClick === 'room') {
+            courses.filterClick = 'room';
             courses.selectCampusCourses(responseCampus, 'room')
           }
           if(courses.filterClick === 'instructor') {
+            courses.filterClick = 'instructor';
             courses.selectCampusCourses(responseCampus, 'instructor')
           }
         }
