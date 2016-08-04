@@ -41,6 +41,27 @@ var calendar = {
       editable          : true, //Events on the calendar can be modified
       events            : this.courses,
       eventOverlap      : false, //Event overlap
+      eventDrop    : function(event, delta, revertFunc) { //Update date
+        let start = event.start.format();
+        let end   = (event.end == null) ? start : event.end.format();
+
+        $.ajax({
+          url     : 'calendar-event.php',
+          type    : 'POST',
+          data    : 'type=updateStartEnd&campus=' + courses.campus +
+          '&eventId=' + event.id + '&start=' + start + '&end=' + end,
+          dataType: 'json',
+          success : function(response) {
+            if(response.status != 'success') {
+              revertFunc();
+            }
+          },
+          error   : function(error) {
+            revertFunc();
+            console.log('Couldn\'t change date: ' + error.responseText);
+          }
+        });
+      },
       eventRender       : function(event, element) {
         //Display room or instructor for each course, based on filter.
         if(event.title === event.roomNumber) {
@@ -53,7 +74,7 @@ var calendar = {
         //Display course number
         element.find('.fc-title').append("<br/>" + event.courseNumber);
       },
-      eventResize       : function(event, delta, revertFunc) {
+      eventResize       : function(event, delta, revertFunc) { //Update time
         let end   = event.end.format();
         let start = event.start.format();
 
@@ -122,9 +143,9 @@ var courses = {
       type   : 'POST', //Send post data
       data   : 'type=selectCampusCourses&campus=' + campus + '&filter=' +
       filter,
-      success: function(c) {
+      success: function(courses) {
         //Parse json encode returned from PHP.
-        let filteredCourses = JSON.parse(c);
+        let filteredCourses = JSON.parse(courses);
 
         //Iterate through filtered courses.
         for(let i = 0; i < filteredCourses.length; i++) {
