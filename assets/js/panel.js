@@ -189,7 +189,6 @@ var courseForm = {
     courseFormModal.init();
     //Initialize three year drop down.
     courseForm.year.init();
-
   },
   quarter     : function() {
   },

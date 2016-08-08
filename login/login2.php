@@ -21,7 +21,7 @@ if(isset($_POST['user']) || isset($_POST['pass'])) {
 
   if($check) { // OK!
     // Set the cookies:
-    setcookie('user', $data['user']);
+    setcookie('user', $user);
     //set sessions
     $_SESSION['username'] = $user;
     // Redirect:

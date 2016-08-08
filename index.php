@@ -49,8 +49,9 @@ include('login/login2.php');
   <!--Admin Panel-->
   <div id="panel">
     <?php
+    include('panel.php');
+
     if(isset($_SESSION['username'])) {
-      include('panel.php');
       include('panel-modal-instructor.php');
       include('panel-modal-course.php');
       include('panel-modal-room.php');
@@ -83,6 +84,7 @@ include('login/login2.php');
   <div class="divider"></div>
 
   <!--Calendars Container-->
+  <?php include('calendar.php'); ?>
   <div class="row" id="calendars"></div>
 
   <!--Scripts-->

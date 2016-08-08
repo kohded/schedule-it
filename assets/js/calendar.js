@@ -41,7 +41,84 @@ var calendar = {
       editable          : true, //Events on the calendar can be modified
       events            : this.courses,
       eventOverlap      : false, //Event overlap
-      eventDrop    : function(event, delta, revertFunc) { //Update date
+      eventClick        : function(event, jsEvent, view) {
+        let eventInstructor   = event.instructor;
+        let eventroomNumber   = event.roomNumber;
+        let eventcourseNumber = event.courseNumber;
+
+        //Find select option text & set it to clicked course data.
+        $("#select-instructor-update option").filter(function() {
+          return this.text == eventInstructor;
+        }).attr('selected', true);
+        $("#select-room-update option").filter(function() {
+          return this.text == eventroomNumber;
+        }).attr('selected', true);
+        $("#select-course-update option").filter(function() {
+          return this.text == eventcourseNumber;
+        }).attr('selected', true);
+
+        //Reload select after setting select.
+        $('#select-instructor-update').material_select();
+        $('#select-room-update').material_select();
+        $('#select-course-update').material_select();
+
+        //Open modal to update course.
+        $('#calendar-update-course').openModal();
+
+        //Delete course
+        $('#delete-course-btn').click(function() {
+          $.ajax({
+            url     : 'calendar-event.php',
+            type    : 'POST',
+            data    : 'type=deleteCourse&campus=' + courses.campus +
+            '&eventId=' + event.id,
+            dataType: 'json',
+            success : function(response) {
+              if(response.status == 'success') {
+                //On successful removal from db, remove course from calendar.
+                thisCalendar.fullCalendar('removeEvents',
+                  function(eventDelete) {
+                    return event === eventDelete;
+                  });
+              }
+            },
+            error   : function(error) {
+              alert('Couldn\'t delete course: ' + error.responseText);
+            }
+          });
+        });
+
+        //Update course
+        $('#update-course-btn').click(function() {
+          //Get values of select option.
+          let instructorSelect = $('#select-instructor-update ' +
+            'option:selected').val();
+          let roomSelect       = $('#select-room-update ' +
+            'option:selected').val();
+          let courseSelect     = $('#select-course-update ' +
+            'option:selected').val();
+
+          $.ajax({
+            url     : 'calendar-event.php',
+            type    : 'POST',
+            data    : 'type=updateCourse&campus=' + courses.campus +
+            '&eventId=' + event.id + '&instructor=' + instructorSelect +
+            '&room=' + roomSelect + '&course=' + courseSelect,
+            dataType: 'json',
+            success : function(response) {
+              if(response.status == 'success') {
+                //On successful update from db, update calendar.
+                courses.selectCampusCourses(courses.campus,
+                  courses.filterClick);
+              }
+            },
+            error   : function(error) {
+              alert('Couldn\'t update course: ' + error.responseText);
+            }
+          });
+        });
+      },
+      eventDrop         : function(event, delta, revertFunc) { //Update date
         let start = event.start.format();
         let end   = (event.end == null) ? start : event.end.format();
 
@@ -58,7 +135,7 @@ var calendar = {
           },
           error   : function(error) {
             revertFunc();
-            console.log('Couldn\'t change date: ' + error.responseText);
+            console.log('Couldn\'t update date: ' + error.responseText);
           }
         });
       },
@@ -91,7 +168,7 @@ var calendar = {
           },
           error   : function(error) {
             revertFunc();
-            console.log('Couldn\'t change time: ' + error.responseText);
+            console.log('Couldn\'t update time: ' + error.responseText);
           }
         });
       },
@@ -139,7 +216,7 @@ var courses = {
   //Display Auburn or Kent courses by room or instructor.
   selectCampusCourses: function(campus, filter) {
     $.ajax({
-      url    : 'calendar.php',
+      url    : 'calendar-filter.php',
       type   : 'POST', //Send post data
       data   : 'type=selectCampusCourses&campus=' + campus + '&filter=' +
       filter,
@@ -191,24 +268,6 @@ var courses = {
             thisCalendarId.fullCalendar('removeEvents');
             //Reload changes from filter button click.
             thisCalendarId.fullCalendar('addEventSource', filteredCourses[i]);
-
-            //BUG IDS GET REARRANGED ON REMOVAL
-            //Remove additional calendar object(s) from the previous
-            // filtering if there are more than a new filtering. Because the
-            // calendar objects are being reused, the additional ones will show
-            // at the bottom.
-            //let calendarObjectCount = $('[id^="calendar--"]').length;
-            //if(calendarObjectCount > filteredCourses.length) {
-            //  //Start calendar id at filtered courses length.
-            //  let removeId = filteredCourses.length;
-            //
-            //  for(let i = removeId; i < calendarObjectCount; i++) {
-            //    //Destroy additional calendar object from previous search.
-            //    $('#calendar--' + removeId).fullCalendar('destroy');
-            //    //Remove calendar card div.
-            //    $('#calendar-card--' + removeId).hide();
-            //  }
-            //}
           }
         }
       },
