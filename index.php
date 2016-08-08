@@ -87,6 +87,17 @@ include('login/login2.php');
   <?php include('calendar.php'); ?>
   <div class="row" id="calendars"></div>
 
+  <!--Check if admin is logged in-->
+  <?php if(isset($_SESSION['username'])) { ?>
+    <script type="text/javascript">
+      var isAdminLoggedIn = true;
+    </script>
+  <?php } else { ?>
+    <script type="text/javascript">
+      var isAdminLoggedIn = false;
+    </script>
+  <?php } ?>
+
   <!--Scripts-->
   <script rel="text/javascript" src="assets/lib/jquery/jquery-3.0.0.min.js"></script>
   <script rel="text/javascript" src="assets/lib/fullcalendar/lib/moment.min.js"></script>

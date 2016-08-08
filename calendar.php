@@ -1,3 +1,4 @@
+<?php if(isset($_SESSION['username'])) { ?>
 <!--Update Calendar Course Modal-->
 <div class="modal modal-fixed-footer" id="calendar-update-course">
   <div class="modal-content">
@@ -44,3 +45,4 @@
     </div>
   </div>
 </div>
+<?php } ?>
