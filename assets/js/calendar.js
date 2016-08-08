@@ -262,12 +262,26 @@ var courses = {
             //Dynamically change title by room number or instructors last name.
             $('#calendar-title' + i).text(calendar.courses[0].title);
 
+            //Get current calendar div by setting id.
             let thisCalendarId = $('#' + el.calendarId);
 
-            //Remove previous courses from calendar.
+            //Remove calendar courses from previous filtering.
             thisCalendarId.fullCalendar('removeEvents');
-            //Reload changes from filter button click.
+            //Reload changes for current filtering.
             thisCalendarId.fullCalendar('addEventSource', filteredCourses[i]);
+
+            //Remove additional calendars from the previous filtering if there
+            // are more than the current filtering. Because the calendar objects
+            // are being reused, the additional ones will show at the bottom.
+            //Iterate through all select inputs that exist.
+            $.each($('[id^="calendar-card--"]'), function(index) {
+              //If calendar count is greater than filteredCourses count, remove.
+              //Index keeps track of the number of calendar cards existing.
+              if((index + 1) > filteredCourses.length) {
+                //Remove additional calendars from previous filtering.
+                $(this).remove();
+              }
+            });
           }
         }
       },
