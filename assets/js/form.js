@@ -25,71 +25,74 @@ function displaySelect() {
             $('#select-room').material_select();
         }
     });
-};
+}
 
 function delete_instructor(id) {
-    if (confirm('Are you sure to delete this instructor ?')) {
-        $.ajax({
-            url: './deleting.php',
-            type: 'POST',
-            data: 'type=deleteInstructor&id=' + id,
-            dataType: 'json',
-            success: function (response) {
+  if(confirm('Are you sure to delete this instructor ?')) {
+    $.ajax({
+      url     : './deleting.php',
+      type    : 'POST',
+      data    : 'type=deleteInstructor&id=' + id,
+      dataType: 'json',
+      success : function(response) {
 
-                if(response.status == 'success') {
+        if(response.status == 'success') {
 
-                    $('#select-instructor').material_select();
-                }
+          $('#select-instructor').material_select();
+        }
 
-
-            }
-        });
-    }
+      }
+    });
+  }
+  else {
+    event.preventDefault();
+  }
 }
 
 function delete_course(id) {
-    if (confirm('Are you sure to delete this course ?')) {
-        $.ajax({
-            url: './deleting.php',
-            type: 'POST',
-            data: 'type=deleteCourse&id=' + id,
-            dataType: 'json',
-            success: function (response) {
+  if(confirm('Are you sure to delete this course ?')) {
+    $.ajax({
+      url     : './deleting.php',
+      type    : 'POST',
+      data    : 'type=deleteCourse&id=' + id,
+      dataType: 'json',
+      success : function(response) {
 
-                if(response.status == 'success') {
+        if(response.status == 'success') {
 
-                    $('#select-course').material_select();
-                }
+          $('#select-course').material_select();
+        }
 
-
-            }
-        });
-    }
+      }
+    });
+  }
+  else {
+    event.preventDefault();
+  }
 }
 
 function delete_room(id) {
-    if (confirm('Are you sure to delete this room ?')) {
-        $.ajax({
-            url: './deleting.php',
-            type: 'POST',
-            data: 'type=deleteRoom&id=' + id,
-            dataType: 'json',
-            success: function (response) {
+  if(confirm('Are you sure to delete this room ?')) {
+    $.ajax({
+      url     : './deleting.php',
+      type    : 'POST',
+      data    : 'type=deleteRoom&id=' + id,
+      dataType: 'json',
+      success : function(response) {
 
-                if(response.status == 'success') {
+        if(response.status == 'success') {
 
-                    $('#select-room').material_select();
-                }
+          $('#select-room').material_select();
+        }
 
-
-            }
-        });
-    }
+      }
+    });
+  }
+  else {
+    event.preventDefault();
+  }
 }
 
-
-
-
-$(document).ready(function () {
-    displaySelect();
+$(document).ready(function() {
+  displaySelect();
 });

@@ -47,8 +47,6 @@ function displayAllInstructors()
     $dbh = null;
 }
 
-;
-
 function displayAllCourses()
 {
 

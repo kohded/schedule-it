@@ -209,5 +209,3 @@ if(isset($_SESSION['username'])) { ?>
     <!--</form>-->
   </div>
 <?php } ?>
-
-<?php
