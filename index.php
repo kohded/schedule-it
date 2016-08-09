@@ -106,5 +106,6 @@ include('login/login2.php');
   <script rel="text/javascript" src="assets/js/index.js"></script>
   <script rel="text/javascript" src="assets/js/panel.js"></script>
   <script rel="text/javascript" src="assets/js/calendar.js"></script>
+  <script rel="text/javascript" src="assets/js/form.js"></script>
 </body>
 </html>

@@ -34,20 +34,19 @@ if(isset($_SESSION['username'])) { ?>
         <label for="select-quarter-year">Year</label>
       </div>
     </div>
-    
+
     <!--Divider-->
     <div class="row">
       <div class=" col s12">
         <div class="divider "></div>
       </div>
     </div>
-    
+
     <div class="row">
       <!--Instructor-->
       <div class="col s2 input-field">
         <select id="select-instructor" required>
           <option value="" disabled selected>Select</option>
-          <?php displayAllInstructors(); ?>
         </select>
         <label for="select-instructor">Instructor</label>
       </div>
@@ -59,12 +58,11 @@ if(isset($_SESSION['username'])) { ?>
           href="#remove-instructor-modal" id="remove-instructor-modal-btn">
           <i class="material-icons">remove</i></button>
       </div>
-      
+
       <!--Course-->
       <div class="input-field col s2">
         <select id="select-course" required>
           <option value="" disabled selected>Select</option>
-          <?php displayAllCourses(); ?>
         </select>
         <label for="select-course">Course</label>
       </div>
@@ -76,12 +74,11 @@ if(isset($_SESSION['username'])) { ?>
           href="#remove-course-modal" id="remove-course-modal-btn">
           <i class="material-icons">remove</i></button>
       </div>
-      
+
       <!--Room-->
       <div class="input-field col s2">
         <select id="select-room" required>
           <option value="" disabled selected>Select</option>
-          <?php displayAllRooms(); ?>
         </select>
         <label for="select-room">Room</label>
       </div>
@@ -94,14 +91,14 @@ if(isset($_SESSION['username'])) { ?>
           <i class="material-icons">remove</i></button>
       </div>
     </div>
-    
+
     <!--Divider-->
     <div class="row">
       <div class=" col s12">
         <div class="divider "></div>
       </div>
     </div>
-    
+
     <div id="days">
       <div id="day-0">
         <div class="row">
@@ -150,7 +147,7 @@ if(isset($_SESSION['username'])) { ?>
             </select>
             <label for="select-s-m">Start Time (Minute)</label>
           </div>
-          
+
           <!--End Time-->
           <!--Hour-->
           <div class="input-field col s2">
@@ -195,12 +192,12 @@ if(isset($_SESSION['username'])) { ?>
         </div>
       </div>
     </div>
-    
+
     <!--Divider-->
     <div class=" col s12">
       <div class="divider "></div>
     </div>
-    
+
     <!--Submit Button-->
     <div class="row">
       <div class="input-field col s12">
@@ -214,59 +211,3 @@ if(isset($_SESSION['username'])) { ?>
 <?php } ?>
 
 <?php
-
-function displayAllInstructors(){
-
-  $dbh = dbConnect();
-
-  $sql = "SELECT * FROM instructor ORDER BY last_name ASC";
-
-  $statement = $dbh->prepare($sql);
-  $statement->execute();
-
-  $result = $statement ->fetchAll(PDO::FETCH_ASSOC);
-
-  foreach($result as $row){
-    echo "<option value=\"" . $row['instructor_id'] . "\">" . $row['first_name'] . ' ' . $row['last_name'] . "</option>";
-  }
-  $dbh = null;
-
-}
-
-function displayAllCourses(){
-
-  $dbh = dbConnect();
-
-  $sql = "SELECT * FROM course ORDER BY course_number ASC";
-
-  $statement = $dbh->prepare($sql);
-  $statement->execute();
-
-  $result = $statement ->fetchAll(PDO::FETCH_ASSOC);
-
-  foreach($result as $row){
-    echo "<option value=\"" . $row['course_id'] . "\">" . $row['course_number'] . "</option>";
-  }
-
-  $dbh = null;
-
-}
-
-function displayAllRooms(){
-
-  $dbh = dbConnect();
-
-  $sql = "SELECT * FROM room ORDER BY room_number ASC";
-
-  $statement = $dbh->prepare($sql);
-  $statement->execute();
-
-  $result = $statement ->fetchAll(PDO::FETCH_ASSOC);
-
-  foreach($result as $row){
-    echo "<option value=\"" . $row['room_id'] . "\">" . $row['room_number'] . "</option>";;
-  }
-  $dbh = null;
-
-}
-?>
